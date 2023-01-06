@@ -7,20 +7,24 @@
 const hre = require("hardhat");
 
 async function main() {
-  const currentTimestampInSeconds = Math.round(Date.now() / 1000);
-  const ONE_YEAR_IN_SECS = 365 * 24 * 60 * 60;
-  const unlockTime = currentTimestampInSeconds + ONE_YEAR_IN_SECS;
+  const BachKhoaToken = await hre.ethers.getContractFactory("BachKhoaToken")
+  const BachKhoaAsset = await hre.ethers.getContractFactory("BachKhoaAsset")
+  const MySwap = await hre.ethers.getContractFactory("MySwap")
 
-  const lockedAmount = hre.ethers.utils.parseEther("1");
+  const bachKhoaToken = await BachKhoaToken.deploy("Bach Khoa Token", "BKT", 1000)
+  const bachKhoaAsset = await BachKhoaAsset.deploy("Bach Khoa Asset", "BKA")
+  
+  await bachKhoaToken.deployed();
+  await bachKhoaAsset.deployed();
 
-  const Lock = await hre.ethers.getContractFactory("Lock");
-  const lock = await Lock.deploy(unlockTime, { value: lockedAmount });
+  console.log(`ERC20: ${bachKhoaToken.address}`);
+  console.log(`ERC721: ${bachKhoaAsset.address}`);
 
-  await lock.deployed();
+  const mySwap = await MySwap.deploy(bachKhoaToken.address, bachKhoaAsset.address, 2)
 
-  console.log(
-    `Lock with 1 ETH and unlock timestamp ${unlockTime} deployed to ${lock.address}`
-  );
+  await mySwap.deployed();
+  
+  console.log(`Swap: ${mySwap.address}`);
 }
 
 // We recommend this pattern to be able to use async/await everywhere

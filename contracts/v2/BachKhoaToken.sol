@@ -4,7 +4,7 @@ pragma solidity >=0.7.0 <0.9.0;
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/extensions/IERC20Metadata.sol";
 
-contract MyERC20 is IERC20, IERC20Metadata {
+contract BachKhoaToken is IERC20, IERC20Metadata {
     string private _name;
     string private _symbol;
     uint256 private _totalSupply;
